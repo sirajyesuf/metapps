@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Tool } from '@/lib/tools-manager';
 
 export default function ToolPage() {
@@ -40,22 +42,30 @@ export default function ToolPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading tool...</p>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex justify-center items-center py-16">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading tool...</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (error || !tool) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Found</h1>
-          <p className="text-gray-600">{error || 'The requested tool could not be found.'}</p>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex justify-center items-center py-16">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Found</h1>
+            <p className="text-gray-600">{error || 'The requested tool could not be found.'}</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -63,11 +73,15 @@ export default function ToolPage() {
   // Only render the dynamic component if we have a valid tool with an ID
   if (!tool.id) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Tool</h1>
-          <p className="text-gray-600">The tool data is invalid or incomplete.</p>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="flex justify-center items-center py-16">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Tool</h1>
+            <p className="text-gray-600">The tool data is invalid or incomplete.</p>
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
@@ -82,5 +96,13 @@ export default function ToolPage() {
     ssr: false
   });
 
-  return <ToolComponent />;
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <div className="py-8">
+        <ToolComponent />
+      </div>
+      <Footer />
+    </div>
+  );
 } 
