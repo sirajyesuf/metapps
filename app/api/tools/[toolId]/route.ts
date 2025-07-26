@@ -16,7 +16,7 @@ export async function GET(
       );
     }
     
-    return NextResponse.json({ tool });
+    return NextResponse.json(tool);
   } catch (error) {
     console.error('Error fetching tool:', error);
     return NextResponse.json(

@@ -15,6 +15,11 @@ export default function ToolPage() {
     const fetchTool = async () => {
       try {
         const toolId = params.toolId as string;
+        
+        if (!toolId) {
+          throw new Error('Tool ID is required');
+        }
+        
         const response = await fetch(`/api/tools/${toolId}`);
         
         if (!response.ok) {
@@ -50,6 +55,18 @@ export default function ToolPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Found</h1>
           <p className="text-gray-600">{error || 'The requested tool could not be found.'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Only render the dynamic component if we have a valid tool with an ID
+  if (!tool.id) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Tool</h1>
+          <p className="text-gray-600">The tool data is invalid or incomplete.</p>
         </div>
       </div>
     );
