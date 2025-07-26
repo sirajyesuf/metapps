@@ -1,0 +1,86 @@
+{
+  "lastUpdated": "2024-01-15T10:30:00Z",
+  "totalTools": 6,
+  "activeTools": 6,
+  "workingTools": 6,
+  "tools": [
+    {
+      "id": "amharic-puzzle",
+      "name": "Amharic Fidel Sliding Puzzle",
+      "description": "Challenge yourself with this original Amharic sliding puzzle game! Sort the Amharic letters in alphabetical order.",
+      "category": "Games & Learning",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/amharic-puzzle",
+      "icon": "Gamepad2",
+      "rating": 4.8,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
+    {
+      "id": "ethiopian-calendar",
+      "name": "Ethiopian Calendar Converter",
+      "description": "Convert dates between Ethiopian and Gregorian calendars with accurate calculations.",
+      "category": "Utilities",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/ethiopian-calendar",
+      "icon": "Calendar",
+      "rating": 4.9,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
+    {
+      "id": "amharic-keyboard",
+      "name": "Virtual Amharic Keyboard",
+      "description": "Type in Amharic script with this virtual keyboard. Perfect for those without Amharic keyboard layout.",
+      "category": "Language Tools",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/amharic-keyboard",
+      "icon": "Keyboard",
+      "rating": 4.7,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
+    {
+      "id": "ethiopian-birr",
+      "name": "Ethiopian Birr Calculator",
+      "description": "Calculate currency conversions, split bills, and perform financial calculations in Ethiopian Birr.",
+      "category": "Finance Tools",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/ethiopian-birr",
+      "icon": "Calculator",
+      "rating": 4.6,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
+    {
+      "id": "geez-converter",
+      "name": "Geez Number Converter",
+      "description": "Convert between Arabic numerals and traditional Geez number system used in Ethiopian manuscripts.",
+      "category": "Language Tools",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/geez-converter",
+      "icon": "BookOpen",
+      "rating": 4.5,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
+    {
+      "id": "coffee-ceremony",
+      "name": "Ethiopian Coffee Ceremony Timer",
+      "description": "Traditional coffee ceremony timing guide with authentic Ethiopian coffee preparation steps.",
+      "category": "Cultural Tools",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/coffee-ceremony",
+      "icon": "Heart",
+      "rating": 4.8,
+      "version": "1.0.0",
+      "author": "MetApps"
+    }
+  ]
+}
