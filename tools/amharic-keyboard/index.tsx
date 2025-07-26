@@ -40,14 +40,39 @@ const amharicSyllabary = [
   { base: "ፐ", forms: ["ፐ", "ፑ", "ፒ", "ፓ", "ፔ", "ፕ", "ፖ", "ፗ"] },
 ];
 
+// QWERTY-style layout for Amharic base letters
+// Row 1: Top row (like QWERTY numbers row)
+const qwertyRow1 = [
+  { base: "ሀ", index: 0 }, { base: "ለ", index: 1 }, { base: "መ", index: 2 }, { base: "ሠ", index: 3 }, { base: "ረ", index: 4 }, 
+  { base: "ሰ", index: 5 }, { base: "ሸ", index: 6 }, { base: "ቀ", index: 7 }, { base: "በ", index: 8 }, { base: "ቨ", index: 9 }
+];
+
+// Row 2: Home row (like QWERTY home row)
+const qwertyRow2 = [
+  { base: "ተ", index: 10 }, { base: "ቸ", index: 11 }, { base: "ኀ", index: 12 }, { base: "ነ", index: 13 }, { base: "ኘ", index: 14 }, 
+  { base: "አ", index: 15 }, { base: "ከ", index: 16 }, { base: "ኸ", index: 17 }, { base: "ወ", index: 18 }, { base: "ዐ", index: 19 }
+];
+
+// Row 3: Bottom row (like QWERTY bottom row)
+const qwertyRow3 = [
+  { base: "ዘ", index: 20 }, { base: "ዠ", index: 21 }, { base: "የ", index: 22 }, { base: "ደ", index: 23 }, { base: "ጀ", index: 24 }, 
+  { base: "ገ", index: 25 }, { base: "ጠ", index: 26 }, { base: "ጨ", index: 27 }, { base: "ጰ", index: 28 }, { base: "ጸ", index: 29 }
+];
+
+// Row 4: Bottom row (remaining letters)
+const qwertyRow4 = [
+  { base: "ፀ", index: 30 }, { base: "ፈ", index: 31 }, { base: "ፐ", index: 32 }
+];
+
+// Space key
+const spaceKey = { base: "Space", index: -1 };
+
 // Numbers and punctuation row (QWERTY top row style)
 const numbersAndPunctuation = [
-  { label: "1", value: "1" }, { label: "2", value: "2" }, { label: "3", value: "3" }, { label: "4", value: "4" }, { label: "5", value: "5" },
-  { label: "6", value: "6" }, { label: "7", value: "7" }, { label: "8", value: "8" }, { label: "9", value: "9" }, { label: "0", value: "0" },
+  { label: "1", value: "፩" }, { label: "2", value: "፪" }, { label: "3", value: "፫" }, { label: "4", value: "፬" }, { label: "5", value: "፭" },
+  { label: "6", value: "፮" }, { label: "7", value: "፯" }, { label: "8", value: "፰" }, { label: "9", value: "፱" }, { label: "10", value: "፲" },
   { label: "-", value: "-" }, { label: "=", value: "=" },
-  { label: "፩", value: "፩" }, { label: "፪", value: "፪" }, { label: "፫", value: "፫" }, { label: "፬", value: "፬" }, { label: "፭", value: "፭" },
-  { label: "፮", value: "፮" }, { label: "፯", value: "፯" }, { label: "፰", value: "፰" }, { label: "፱", value: "፱" }, { label: "፲", value: "፲" },
-  { label: "፣", value: "፣" }, { label: "።", value: "።" }, { label: "፤", value: "፤" }, { label: "፥", value: "፥" }, { label: "፧", value: "፧" }, { label: "፨", value: "፨" }
+  { label: "comma", value: "፣" }, { label: "period", value: "።" }, { label: "semicolon", value: "፤" }, { label: "colon", value: "፥" }, { label: "question", value: "፧" }, { label: "paragraph", value: "፨" }
 ];
 
 export default function AmharicKeyboard() {
@@ -90,13 +115,30 @@ export default function AmharicKeyboard() {
     }, 0);
   };
 
+  const renderKeyboardRow = (row: Array<{base: string, index: number}>, rowClass: string = "") => {
+    return (
+      <div className={`flex justify-center gap-1 sm:gap-2 ${rowClass}`}>
+        {row.map((item) => (
+          <button
+            key={item.index}
+            type="button"
+            className={`w-10 h-10 sm:w-12 sm:h-12 bg-white border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 text-lg sm:text-xl font-geez focus:z-20 ${activeBase === item.index ? 'ring-2 ring-blue-400' : ''}`}
+            onClick={() => setActiveBase(activeBase === item.index ? null : item.index)}
+          >
+            {item.base}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6">
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 sm:px-6 py-4">
           <h1 className="text-xl sm:text-2xl font-bold text-white text-center">
-            Amharic Syllabary Keyboard አማርኛ ኪቦርድ
+            Amharic QWERTY Keyboard አማርኛ ኪቦርድ
           </h1>
           <p className="text-blue-100 text-center mt-1 text-sm sm:text-base">
             Click a base letter to see all its forms, then click a form to insert it
@@ -104,7 +146,7 @@ export default function AmharicKeyboard() {
         </div>
         <div className="p-4 sm:p-6">
           {/* Text Area */}
-          <div className="relative mb-6">
+          <div className="relative">
             <textarea
               ref={textareaRef}
               value={text}
@@ -119,7 +161,7 @@ export default function AmharicKeyboard() {
             </div>
           </div>
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+          <div className="flex justify-end mb-6">
             <div className="flex items-center space-x-3">
               <button
                 onClick={handleCopy}
@@ -175,7 +217,7 @@ export default function AmharicKeyboard() {
               ))}
             </div>
           )}
-          {/* Syllabary Keyboard */}
+          {/* QWERTY Style Keyboard */}
           <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-6">
             {/* Numbers and Punctuation Row */}
             <div className="flex flex-wrap justify-center gap-1 sm:gap-2 mb-3">
@@ -191,19 +233,35 @@ export default function AmharicKeyboard() {
                 </button>
               ))}
             </div>
-            {/* Amharic Syllabary Grid */}
-            <div className="grid grid-cols-6 sm:grid-cols-9 gap-1 sm:gap-2">
-              {amharicSyllabary.map((syll, i) => (
-                <div key={i} className="relative">
-                  <button
-                    type="button"
-                    className={`w-10 h-10 sm:w-12 sm:h-12 bg-white border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 text-lg sm:text-xl font-geez focus:z-20 ${activeBase === i ? 'ring-2 ring-blue-400' : ''}`}
-                    onClick={() => setActiveBase(activeBase === i ? null : i)}
-                  >
-                    {syll.base}
-                  </button>
-                </div>
-              ))}
+            
+            {/* QWERTY Style Amharic Keyboard */}
+            <div className="space-y-2">
+              {/* Row 1 - Top row */}
+              {renderKeyboardRow(qwertyRow1, "mb-2")}
+              
+              {/* Row 2 - Home row */}
+              {renderKeyboardRow(qwertyRow2, "mb-2")}
+              
+              {/* Row 3 - Bottom row */}
+              {renderKeyboardRow(qwertyRow3, "mb-2")}
+              
+              {/* Big space between main keyboard and remaining letters */}
+              <div className="h-8"></div>
+              
+              {/* Row 4 - Bottom row (remaining letters) */}
+              {renderKeyboardRow(qwertyRow4)}
+              
+              {/* Space key */}
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  className="w-32 h-10 sm:w-40 sm:h-12 bg-gray-200 border border-gray-400 rounded-lg hover:bg-gray-300 transition-all duration-200 text-sm sm:text-base font-medium"
+                  onClick={() => insertCharacter(" ")}
+                  title="Space"
+                >
+                  Space
+                </button>
+              </div>
             </div>
           </div>
       
