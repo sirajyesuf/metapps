@@ -32,7 +32,6 @@ export default function AdminPage() {
   const [registry, setRegistry] = useState<ToolRegistry | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [editingTool, setEditingTool] = useState<string | null>(null);
   const [newTool, setNewTool] = useState<Partial<Tool>>({
     id: '',
     name: '',

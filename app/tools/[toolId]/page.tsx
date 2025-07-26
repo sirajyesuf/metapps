@@ -1,105 +1,69 @@
 'use client';
 
-import { notFound } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+import { Tool } from '@/lib/tools-manager';
 
-interface ToolPageProps {
-  params: Promise<{ toolId: string }>;
-}
-
-export default function ToolPage({ params }: ToolPageProps) {
-  const [tool, setTool] = useState<any>(null);
+export default function ToolPage() {
+  const params = useParams();
+  const [tool, setTool] = useState<Tool | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch tool data from API
     const fetchTool = async () => {
       try {
-        const { toolId } = await params;
+        const toolId = params.toolId as string;
         const response = await fetch(`/api/tools/${toolId}`);
-        const data = await response.json();
         
-        if (data.tool && data.tool.isActive && data.tool.isWorking) {
-          setTool(data.tool);
-        } else {
-          notFound();
+        if (!response.ok) {
+          throw new Error('Tool not found');
         }
+        
+        const data = await response.json();
+        setTool(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load tool');
+      } finally {
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching tool:', error);
-        notFound();
       }
     };
 
     fetchTool();
-  }, [params]);
+  }, [params.toolId]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="flex justify-center items-center py-16">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading tool...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  if (!tool) {
-    notFound();
-  }
-
-  // Dynamic import of the tool component
-  const ToolComponent = dynamic(async () => {
-    const { toolId } = await params;
-    return import(`@/tools/${toolId}`);
-  }, {
-    loading: () => (
-      <div className="flex justify-center items-center py-16">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading tool...</p>
         </div>
       </div>
+    );
+  }
+
+  if (error || !tool) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Found</h1>
+          <p className="text-gray-600">{error || 'The requested tool could not be found.'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Dynamically import the tool component
+  const ToolComponent = dynamic(() => import(`@/tools/${tool.id}`), {
+    loading: () => (
+      <div className="flex justify-center items-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
     ),
     ssr: false
   });
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <div className="flex items-center mb-4">
-            <h1 className="text-3xl font-bold text-gray-900">{tool.name}</h1>
-            <span className="ml-4 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-              Active
-            </span>
-          </div>
-          
-          <p className="text-gray-600 text-lg mb-4">{tool.description}</p>
-          
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
-            <span>Category: {tool.category}</span>
-            <span>•</span>
-            <span>Difficulty: {tool.difficulty}</span>
-            <span>•</span>
-            <span>Rating: {tool.rating}/5</span>
-          </div>
-        </div>
-        
-        <ToolComponent />
-      </div>
-      
-      <Footer />
-    </div>
-  );
+  return <ToolComponent />;
 } 

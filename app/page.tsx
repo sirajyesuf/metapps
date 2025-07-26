@@ -6,17 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ToolCard from "@/components/ToolCard";
 import Hero from '@/components/Hero';
-
-interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  icon: string;
-  difficulty: string;
-  rating: number;
-  route: string;
-}
+import { Tool } from '@/lib/tools-manager';
 
 export default function Home() {
   const [tools, setTools] = useState<Tool[]>([]);

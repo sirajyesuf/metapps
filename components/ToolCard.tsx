@@ -1,85 +1,88 @@
 'use client';
 
-import { LucideIcon, icons } from 'lucide-react';
-import { Star } from 'lucide-react';
+import { Star, Circle, Gamepad2, Calendar, Keyboard, Calculator, BookOpen, Heart } from 'lucide-react';
+import { Tool } from '@/lib/tools-manager';
 
 interface ToolCardProps {
-  tool: {
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    icon: string;
-    rating: number;
-    route: string;
-  };
+  tool: Tool;
   onClick: () => void;
 }
 
 export default function ToolCard({ tool, onClick }: ToolCardProps) {
-  // Get icon component dynamically
-  const IconComponent = icons[tool.icon as keyof typeof icons] || icons.Circle;
+  // Get icon component based on tool.icon
+  const getIconComponent = (iconName: string) => {
+    const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
+      Gamepad2,
+      Calendar,
+      Keyboard,
+      Calculator,
+      BookOpen,
+      Heart,
+      Circle
+    };
+    return iconMap[iconName] || Circle;
+  };
+
+  const IconComponent = getIconComponent(tool.icon);
 
   // Get icon color based on category
   const getIconColor = (category: string) => {
-    switch (category) {
-      case 'Games & Learning':
+    switch (category.toLowerCase()) {
+      case 'games & learning':
         return 'text-purple-600';
-      case 'Utilities':
+      case 'utilities':
         return 'text-blue-600';
-      case 'Language Tools':
+      case 'language tools':
         return 'text-green-600';
-      case 'Finance Tools':
+      case 'finance tools':
         return 'text-yellow-600';
-      case 'Cultural Tools':
-        return 'text-orange-600';
+      case 'cultural tools':
+        return 'text-red-600';
       default:
         return 'text-gray-600';
     }
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-200 overflow-hidden">
-      <div className="p-6">
-        {/* Header with Icon and Rating */}
-        <div className="flex items-start justify-between mb-4">
-          <IconComponent className={`w-8 h-8 ${getIconColor(tool.category)}`} />
-          <div className="text-right">
-            <div className="flex items-center text-sm">
-              <Star className="w-3 h-3 text-yellow-400 fill-current mr-1" />
-              <span className="text-gray-700 font-medium">{tool.rating}</span>
-            </div>
-          </div>
+    <div
+      onClick={onClick}
+      className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-blue-300 transition-all duration-200 cursor-pointer group"
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className={`p-3 rounded-lg ${getIconColor(tool.category).replace('text-', 'bg-').replace('-600', '-100')}`}>
+          <IconComponent className={`w-6 h-6 ${getIconColor(tool.category)}`} />
         </div>
-
-        {/* Tool Name */}
-        <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
-          {tool.name}
-        </h3>
-
-        {/* Category Tag */}
-        <div className="mb-3">
-          <span className="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-            {tool.category}
-          </span>
+        <div className="flex items-center space-x-1">
+          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+          <span className="text-sm font-medium text-gray-600">{tool.rating}</span>
         </div>
+      </div>
 
-        {/* Description */}
-        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-          {tool.description}
-        </p>
+      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+        {tool.name}
+      </h3>
+      
+      <p className="text-gray-600 mb-4 line-clamp-2">
+        {tool.description}
+      </p>
 
-        {/* Launch Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick();
-          }}
-          className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center text-sm font-medium"
-        >
-          <span className="mr-2">▷</span>
-          Launch Tool
-        </button>
+      <div className="flex items-center justify-between">
+        <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+          {tool.category}
+        </span>
+        
+        <div className="flex items-center space-x-2">
+          {tool.isActive && (
+            <span className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">
+              Active
+            </span>
+          )}
+          {tool.isWorking && (
+            <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">
+              Working
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

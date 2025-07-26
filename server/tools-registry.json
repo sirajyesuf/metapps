@@ -32,8 +32,8 @@
     },
     {
       "id": "amharic-keyboard",
-      "name": "Virtual Amharic Keyboard",
-      "description": "Type in Amharic script with this virtual keyboard. Perfect for those without Amharic keyboard layout.",
+      "name": "Amharic Keyboard & Transliterator",
+      "description": "Type in Amharic with real-time transliteration from Latin characters. Features visual keyboard, copy/download functionality, and comprehensive Amharic character set.",
       "category": "Language Tools",
       "isActive": true,
       "isWorking": true,
