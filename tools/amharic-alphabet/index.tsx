@@ -369,7 +369,7 @@ export default function AmharicAlphabet() {
           </p>
         </div>
 
-        <div className="p-4 sm:p-6">
+        <div className="p-4 sm:p-2">
           {/* Description */}
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <h2 className="text-lg font-bold text-gray-900 mb-2">Amharic / Ethiopian Alphabet</h2>
@@ -384,7 +384,7 @@ export default function AmharicAlphabet() {
               {amharicAlphabet.map((char, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 p-4 text-center hover:bg-gray-50 transition-colors cursor-pointer"
+                  className="border border-gray-200 p-2 text-center hover:bg-gray-50 transition-colors cursor-pointer"
                   onClick={() => handleCopy(char.character)}
                   title={`${char.character} (${char.transliteration})`}
                 >
