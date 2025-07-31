@@ -138,7 +138,8 @@ export default function AmharicKeyboard() {
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 sm:px-6 py-4">
           <h1 className="text-xl sm:text-2xl font-bold text-white text-center">
-            Amharic QWERTY Keyboard አማርኛ ኪቦርድ
+            Amharic Keyboard Online
+
           </h1>
           <p className="text-blue-100 text-center mt-1 text-sm sm:text-base">
             Click a base letter to see all its forms, then click a form to insert it

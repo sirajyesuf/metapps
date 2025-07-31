@@ -1,9 +1,22 @@
 {
   "lastUpdated": "2024-01-15T10:30:00Z",
-  "totalTools": 6,
-  "activeTools": 6,
-  "workingTools": 6,
+  "totalTools": 8,
+  "activeTools": 8,
+  "workingTools": 8,
   "tools": [
+    {
+      "id": "amharic-alphabet",
+      "name": "Amharic Alphabet Reference",
+      "description": "Complete Amharic alphabet with all characters, transliterations, and phonetic series. Search and filter by categories.",
+      "category": "Language Tools",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/amharic-alphabet",
+      "icon": "BookOpen",
+      "rating": 4.9,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
     {
       "id": "amharic-puzzle",
       "name": "Amharic Fidel Sliding Puzzle",
@@ -79,6 +92,19 @@
       "route": "/tools/coffee-ceremony",
       "icon": "Heart",
       "rating": 4.8,
+      "version": "1.0.0",
+      "author": "MetApps"
+    },
+    {
+      "id": "stopwatch",
+      "name": "Modern Stopwatch",
+      "description": "Professional stopwatch with lap tracking, precision timing, and keyboard shortcuts for efficient use.",
+      "category": "Utilities",
+      "isActive": true,
+      "isWorking": true,
+      "route": "/tools/stopwatch",
+      "icon": "Timer",
+      "rating": 4.9,
       "version": "1.0.0",
       "author": "MetApps"
     }
