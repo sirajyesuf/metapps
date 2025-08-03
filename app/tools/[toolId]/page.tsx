@@ -1,68 +1,74 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import { Metadata } from 'next';
+import { getToolById } from '@/lib/tools-manager';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Tool } from '@/lib/tools-manager';
+import StructuredData from "@/components/StructuredData";
+import dynamic from 'next/dynamic';
 
-export default function ToolPage() {
-  const params = useParams();
-  const [tool, setTool] = useState<Tool | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchTool = async () => {
-      try {
-        const toolId = params.toolId as string;
-        
-        if (!toolId) {
-          throw new Error('Tool ID is required');
-        }
-        
-        const response = await fetch(`/api/tools/${toolId}`);
-        
-        if (!response.ok) {
-          throw new Error('Tool not found');
-        }
-        
-        const data = await response.json();
-        setTool(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load tool');
-      } finally {
-        setLoading(false);
-      }
+// Generate metadata for SEO
+export async function generateMetadata({ params }: { params: Promise<{ toolId: string }> }): Promise<Metadata> {
+  const { toolId } = await params;
+  const tool = await getToolById(toolId);
+  
+  if (!tool) {
+    return {
+      title: 'Tool Not Found - MetApps',
+      description: 'The requested tool could not be found.',
     };
-
-    fetchTool();
-  }, [params.toolId]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="flex justify-center items-center py-16">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading tool...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
   }
 
-  if (error || !tool) {
+  return {
+    title: `${tool.name} - MetApps`,
+    description: tool.description,
+    keywords: `${tool.name}, ${tool.category}, Ethiopian tools, ${toolId}`,
+    openGraph: {
+      title: `${tool.name} - MetApps`,
+      description: tool.description,
+      type: 'website',
+      url: `https://metapps.com${tool.route}`,
+      images: [
+        {
+          url: `/api/og?title=${encodeURIComponent(tool.name)}&description=${encodeURIComponent(tool.description)}`,
+          width: 1200,
+          height: 630,
+          alt: tool.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${tool.name} - MetApps`,
+      description: tool.description,
+      images: [`/api/og?title=${encodeURIComponent(tool.name)}&description=${encodeURIComponent(tool.description)}`],
+    },
+    alternates: {
+      canonical: `https://metapps.com${tool.route}`,
+    },
+  };
+}
+
+// Generate static params for all tools
+export async function generateStaticParams() {
+  const { readToolsRegistry } = await import('@/lib/tools-manager');
+  const registry = await readToolsRegistry();
+  
+  return registry.tools.map((tool) => ({
+    toolId: tool.id,
+  }));
+}
+
+export default async function ToolPage({ params }: { params: Promise<{ toolId: string }> }) {
+  const { toolId } = await params;
+  const tool = await getToolById(toolId);
+
+  if (!tool) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="flex justify-center items-center py-16">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Tool Not Found</h1>
-            <p className="text-gray-600">{error || 'The requested tool could not be found.'}</p>
+            <p className="text-gray-600">The requested tool could not be found.</p>
           </div>
         </div>
         <Footer />
@@ -70,39 +76,26 @@ export default function ToolPage() {
     );
   }
 
-  // Only render the dynamic component if we have a valid tool with an ID
-  if (!tool.id) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <Header />
-        <div className="flex justify-center items-center py-16">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Tool</h1>
-            <p className="text-gray-600">The tool data is invalid or incomplete.</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Dynamically import the tool component
-  const ToolComponent = dynamic(() => import(`@/tools/${tool.id}`), {
+  // Dynamic import with SSR enabled for better SEO
+  const ToolComponent = dynamic(() => import(`@/tools/${toolId}`), {
     loading: () => (
       <div className="flex justify-center items-center py-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     ),
-    ssr: false
+    ssr: true, // Enable SSR for SEO
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="py-8">
-        <ToolComponent />
+    <>
+      <StructuredData type="tool" tool={tool} />
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="py-8">
+          <ToolComponent />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   );
 } 

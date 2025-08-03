@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ToolCard from "@/components/ToolCard";
 import Hero from '@/components/Hero';
+import StructuredData from '@/components/StructuredData';
 import { Tool } from '@/lib/tools-manager';
 
 export default function Home() {
@@ -48,31 +49,34 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-    <Hero/>
-
-      {/* Tools Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool) => (
-            <ToolCard 
-              key={tool.id}
-              tool={tool}
-              onClick={() => handleToolClick(tool)}
-            />
-          ))}
-        </div>
+    <>
+      <StructuredData type="homepage" />
+      <div className="min-h-screen bg-gray-50">
+        <Header />
         
-        {tools.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No active tools available at the moment.</p>
-          </div>
-        )}
-      </div>
+        <Hero />
 
-      <Footer />
-    </div>
+        {/* Tools Grid */}
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tools.map((tool) => (
+              <ToolCard 
+                key={tool.id}
+                tool={tool}
+                onClick={() => handleToolClick(tool)}
+              />
+            ))}
+          </div>
+          
+          {tools.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No active tools available at the moment.</p>
+            </div>
+          )}
+        </div>
+
+        <Footer />
+      </div>
+    </>
   );
 }

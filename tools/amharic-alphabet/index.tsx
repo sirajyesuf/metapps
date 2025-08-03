@@ -362,7 +362,7 @@ export default function AmharicAlphabet() {
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 sm:px-6 py-4">
           <h1 className="text-xl sm:text-2xl font-bold text-white text-center">
-            Amharic Alphabet Reference
+            Amharic Alphabet
           </h1>
           <p className="text-blue-100 text-center mt-1 text-sm sm:text-base">
             Complete Amharic alphabet with transliterations - Click any letter to copy
